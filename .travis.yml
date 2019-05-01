@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vladimirkuchinskiy/multi-docker/client-test -f ./client/Dockerfile.dev .
+
+script:
+  - docker run vladimirkuchinskiy/multi-docker/client-test npm run ci-test
+
+after_success:
+  - docker build -t vladimirkuchinskiy/multi-docker/client ./client
+  - docker build -t vladimirkuchinskiy/multi-docker/nginx ./nginx
+  - docker build -t vladimirkuchinskiy/multi-docker/server ./server
+  - docker build -t vladimirkuchinskiy/multi-docker/worker ./worker
+  # Login to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push vladimirkuchinskiy/multi-docker/client
+  - docker push vladimirkuchinskiy/multi-docker/nginx
+  - docker push vladimirkuchinskiy/multi-docker/server
+  - docker push vladimirkuchinskiy/multi-docker/worker
