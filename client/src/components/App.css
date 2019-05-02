@@ -19,6 +19,14 @@
   color: white;
 }
 
+.App-header a {
+  color: #0ec3f5;
+}
+
+.App-header a:hover {
+  color: #61dafb;
+}
+
 .App-link {
   color: #61dafb;
 }
